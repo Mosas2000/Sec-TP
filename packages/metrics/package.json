@@ -1,0 +1,52 @@
+{
+  "name": "@tipstream/sdk-metrics",
+  "version": "1.0.0-alpha.0",
+  "description": "Metrics collection and NPM download tracking for TipStream SDK",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node build.js",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mosas2000/Sec-TP.git",
+    "directory": "packages/metrics"
+  },
+  "keywords": [
+    "tipstream",
+    "metrics",
+    "analytics",
+    "npm-tracker",
+    "downloads",
+    "typescript"
+  ],
+  "author": "Sec-ts",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}
