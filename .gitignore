@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Cache
+.cache/
+.eslintcache
+.npm
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Package manager locks (keep package-lock.json for npm)
+yarn.lock
+pnpm-lock.yaml
+
+# Metrics data (optional - can be committed for historical tracking)
+# metrics-data/
+
+# Secrets (never commit)
+*.pem
+*.key
+secrets/
