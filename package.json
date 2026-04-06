@@ -24,6 +24,7 @@
     "audit": "npm audit",
     "audit:fix": "npm audit fix",
     "security:scan": "snyk test",
+    "sbom": "npx tsx scripts/generate-sbom.ts",
     "prepublishOnly": "npm run build && npm run test",
     "release": "node scripts/release.js",
     "metrics:collect": "node scripts/metrics.js"
