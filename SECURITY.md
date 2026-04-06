@@ -109,6 +109,40 @@ We regularly audit our dependencies:
 - Dependabot alerts enabled
 - SBOM generation for each release
 
+## Security Checklist for Contributors
+
+Before submitting code:
+
+- [ ] No secrets or credentials in code
+- [ ] Input validation for all user data
+- [ ] Output encoding to prevent XSS
+- [ ] Parameterized queries (if applicable)
+- [ ] Secure random number generation
+- [ ] Proper error handling (no sensitive info in errors)
+- [ ] Dependencies are from trusted sources
+- [ ] Tests include security edge cases
+
+## Threat Model
+
+### In Scope
+- API authentication and authorization
+- Data encryption at rest and in transit
+- Input validation and sanitization
+- Secure key management
+- Audit logging
+
+### Out of Scope
+- Physical security
+- Social engineering
+- Denial of service protection
+- Third-party service security
+
 ## Contact
 
-For security concerns, please contact the security team through the appropriate channels (to be configured).
+For security concerns:
+- GitHub Security Advisories: [Report a vulnerability](https://github.com/Mosas2000/Sec-TP/security/advisories/new)
+- For urgent issues requiring immediate attention, use the GitHub Security Advisory feature
+
+## Acknowledgments
+
+We thank the security researchers who help keep this SDK secure. Acknowledged reporters will be listed here with their permission.
