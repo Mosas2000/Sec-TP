@@ -1,0 +1,64 @@
+{
+  "name": "@tipstream/sdk",
+  "version": "1.0.0-alpha.0",
+  "description": "Security-focused SDK for TipStream with built-in metrics collection",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "build:core": "npm run build -w @tipstream/sdk-core",
+    "build:security": "npm run build -w @tipstream/sdk-security",
+    "build:metrics": "npm run build -w @tipstream/sdk-metrics",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint packages/*/src/**/*.ts",
+    "lint:fix": "eslint packages/*/src/**/*.ts --fix",
+    "format": "prettier --write \"packages/*/src/**/*.ts\"",
+    "format:check": "prettier --check \"packages/*/src/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf packages/*/dist",
+    "audit": "npm audit",
+    "audit:fix": "npm audit fix",
+    "security:scan": "snyk test",
+    "prepublishOnly": "npm run build && npm run test",
+    "release": "node scripts/release.js",
+    "metrics:collect": "node scripts/metrics.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "esbuild": "^0.20.0",
+    "eslint": "^8.56.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "prettier": "^3.2.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0",
+    "@vitest/coverage-v8": "^1.2.0",
+    "snyk": "^1.1269.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mosas2000/Sec-TP.git"
+  },
+  "keywords": [
+    "tipstream",
+    "sdk",
+    "security",
+    "metrics",
+    "npm-tracker",
+    "typescript"
+  ],
+  "author": "Sec-ts",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Mosas2000/Sec-TP/issues"
+  },
+  "homepage": "https://github.com/Mosas2000/Sec-TP#readme"
+}
