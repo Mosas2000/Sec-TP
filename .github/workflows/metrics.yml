@@ -1,0 +1,75 @@
+name: Metrics Collection
+
+on:
+  schedule:
+    # Run daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Specific package to track (leave empty for all)'
+        required: false
+        default: ''
+
+jobs:
+  collect-metrics:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build metrics package
+        run: npm run build -w @tipstream/sdk-metrics
+
+      - name: Collect NPM download metrics
+        run: |
+          mkdir -p metrics-data
+          node scripts/collect-metrics.js
+        env:
+          METRICS_OUTPUT_DIR: metrics-data
+          SPECIFIC_PACKAGE: ${{ github.event.inputs.package }}
+
+      - name: Generate metrics report
+        run: node scripts/generate-metrics-report.js
+        env:
+          METRICS_INPUT_DIR: metrics-data
+
+      - name: Commit metrics data
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add metrics-data/ || true
+          git diff --staged --quiet || git commit -m "chore(metrics): Update download metrics [skip ci]"
+          git push || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload metrics artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-metrics-${{ github.run_number }}
+          path: metrics-data/
+          retention-days: 90
+
+  notify:
+    needs: collect-metrics
+    runs-on: ubuntu-latest
+    if: failure()
+    
+    steps:
+      - name: Notify on failure
+        run: |
+          echo "::warning::Metrics collection failed"
