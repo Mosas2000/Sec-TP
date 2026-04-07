@@ -2,7 +2,6 @@ import type {
   TipStreamClientConfig,
   RequestOptions,
   ApiResponse,
-  HttpMethod,
   ClientEvents,
   EventListener,
   RequestSigner,
@@ -300,11 +299,11 @@ export class TipStreamClient {
    */
   private async parseErrorResponse(response: Response): Promise<ApiErrorResponse> {
     try {
-      const body = await response.json();
+      const body = await response.json() as Record<string, unknown>;
       return {
-        message: body.message ?? body.error ?? response.statusText,
-        code: body.code,
-        details: body.details,
+        message: (body.message as string) ?? (body.error as string) ?? response.statusText,
+        code: body.code as string | undefined,
+        details: body.details as Record<string, unknown> | undefined,
       };
     } catch {
       return {

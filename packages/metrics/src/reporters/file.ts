@@ -91,7 +91,6 @@ export class FileReporter implements MetricsReporter {
 
   private async rotate(): Promise<void> {
     const fs = await import('fs/promises');
-    const path = await import('path');
 
     // Delete oldest backup
     const oldestBackup = `${this.config.path}.${this.config.maxBackups}`;

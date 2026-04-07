@@ -86,6 +86,38 @@ interface CacheEntry<T> {
 }
 
 /**
+ * NPM API point downloads response
+ */
+interface NpmPointResponse {
+  package: string;
+  downloads: number;
+  start: string;
+  end: string;
+}
+
+/**
+ * NPM API range downloads response
+ */
+interface NpmRangeResponse {
+  package: string;
+  downloads: DailyDownload[];
+  start: string;
+  end: string;
+}
+
+/**
+ * NPM Registry metadata response
+ */
+interface NpmRegistryResponse {
+  name: string;
+  description?: string;
+  'dist-tags'?: { latest?: string };
+  versions?: Record<string, unknown>;
+  time?: Record<string, string>;
+  maintainers?: Array<{ name: string }>;
+}
+
+/**
  * NPM Registry API client for tracking package downloads
  *
  * @example
@@ -143,7 +175,7 @@ export class NpmTracker {
     if (cached) return cached;
 
     const url = `https://api.npmjs.org/downloads/point/${period}/${encodeURIComponent(packageName)}`;
-    const response = await this.fetch(url);
+    const response = await this.fetch<NpmPointResponse>(url);
 
     const data: PackageDownloads = {
       package: response.package,
@@ -168,7 +200,7 @@ export class NpmTracker {
     if (cached) return cached;
 
     const url = `https://api.npmjs.org/downloads/range/${period}/${encodeURIComponent(packageName)}`;
-    const response = await this.fetch(url);
+    const response = await this.fetch<NpmRangeResponse>(url);
 
     const data: PackageDownloads = {
       package: response.package,
@@ -191,17 +223,16 @@ export class NpmTracker {
     if (cached) return cached;
 
     const url = `${this.config.registryUrl}/${encodeURIComponent(packageName)}`;
-    const response = await this.fetch(url);
+    const response = await this.fetch<NpmRegistryResponse>(url);
 
     const latestVersion = response['dist-tags']?.latest;
-    const latestData = latestVersion ? response.versions?.[latestVersion] : null;
 
     const data: PackageMetadata = {
       name: response.name,
       version: latestVersion ?? 'unknown',
       description: response.description,
-      lastPublish: response.time?.[latestVersion],
-      maintainers: response.maintainers?.map((m: { name: string }) => m.name),
+      lastPublish: latestVersion ? response.time?.[latestVersion] : undefined,
+      maintainers: response.maintainers?.map((m) => m.name),
     };
 
     // Get weekly downloads
@@ -297,7 +328,7 @@ export class NpmTracker {
   /**
    * Fetch data from URL
    */
-  private async fetch(url: string): Promise<Record<string, unknown>> {
+  private async fetch<T>(url: string): Promise<T> {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.config.timeout);
 
@@ -315,7 +346,7 @@ export class NpmTracker {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
-      return await response.json() as Record<string, unknown>;
+      return await response.json() as T;
     } catch (error) {
       clearTimeout(timeoutId);
       throw error;

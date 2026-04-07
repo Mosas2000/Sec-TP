@@ -82,13 +82,17 @@ describe('TipStreamClient', () => {
     it('should handle API errors', async () => {
       const client = new TipStreamClient({ apiKey: 'test-key' });
       
-      mockFetch.mockResolvedValueOnce({
+      // Set up mock for both calls
+      const errorResponse = {
         ok: false,
         status: 400,
         statusText: 'Bad Request',
         headers: new Map(),
         json: () => Promise.resolve({ message: 'Invalid input', code: 'INVALID_INPUT' }),
-      });
+      };
+      
+      mockFetch.mockResolvedValueOnce(errorResponse);
+      mockFetch.mockResolvedValueOnce(errorResponse);
 
       await expect(client.get('/test')).rejects.toThrow(TipStreamError);
       

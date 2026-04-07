@@ -1,4 +1,4 @@
-import type { PackageDownloads, DownloadTrend, DownloadPeriod } from './npm-tracker.js';
+import type { PackageDownloads, DownloadPeriod } from './npm-tracker.js';
 
 /**
  * Stored download record

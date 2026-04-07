@@ -287,7 +287,7 @@ export class MetricsCollector {
     // Aggregate metrics
     const aggregated: AggregatedMetric[] = [];
 
-    for (const [key, points] of this.buffer.entries()) {
+    for (const [, points] of this.buffer.entries()) {
       if (points.length === 0) continue;
 
       const first = points[0]!;
